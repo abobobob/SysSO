@@ -3,17 +3,16 @@ package sysos;
 import sysos.process_manager.process;
 
 public class interpreter {
-	Memory m = new Memory();
-	FileSystem f = new FileSystem();
-	process pr;
-	interpreter(Memory m,process pr, FileSystem f)
+	public Memory m = new Memory();
+	public FileSystem f = new FileSystem();
+	interpreter(Memory m, FileSystem f)
 	{
 		this.m=m;
-		pr = SysOS.T.find(SysOS.OBECNY_PROCES);
 		this.f=f;
 	}
 void exe()
 {
+	process pr=Main.P.find(Main.OBECNY_PROCES);
 	String roz;
 	roz=m.readUntilSpace(pr.counter);
 	pr.counter+=roz.length()+1;
@@ -297,6 +296,21 @@ void exe()
 		process_manager man= new process_manager(); 
 		pr.kill(man.find_name(roz));
 	} break;
+	case "WC":
+	{
+		roz="";
+		roz=m.readUntilSpace(pr.counter);
+		pr.counter+=roz.length()+1;
+		if(roz.equals("R1"))
+			
+		if(roz.equals("R2"))
+			
+		if(roz.equals("R3"))
+			
+		if(roz.equals("R4"))
+			
+		
+	} break;
 	case "CC":
 	{
 		roz="";
@@ -304,21 +318,23 @@ void exe()
 		pr.counter+=roz.length()+1;
 		String roz2=m.readUntilSpace(pr.counter);
 		pr.counter+=roz2.length()+1;
-		Potoki.pipe();
+		if(pr.next.equals(null))
+			pr.fork();
+		potoki.pipe(pr);
 	} break;
 	case "SC":
 	{
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		Potoki.write();
+		potoki.write(pr);
 	} break;
 	case "RC":
 	{
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		Potoki.read();
+		potoki.read(pr.next);
 	} break;
 	case "EX":
 	{
