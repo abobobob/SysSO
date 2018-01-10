@@ -1,5 +1,6 @@
-package potoki;
+package sysos;
 
+import sysos.process_manager.process;
 
 public class plik1 {
     static potoki[] tab=new potoki[16];
