@@ -60,7 +60,7 @@ public class schedulerr {
 		qs.get(i).remove(0);		
 	}
 
-	private void check(process actual, process_manager p) {
+	public void check(process actual, process_manager p) {
 		actual.change_process_state(READY);						
 		if(runningProcess.PID == null) {						//jesli zaden proces nie jest running wchodzi do runProcess gdzie wlacza sie proces z najnizszym priorytetem
 			runProcess(p);										//aktualny jako running
