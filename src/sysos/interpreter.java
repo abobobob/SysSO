@@ -25,10 +25,10 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz=="R1") idrej=1;
-		if(roz=="R2") idrej=2;
-		if(roz=="R3") idrej=3;
-		if(roz=="R4") idrej=4;
+		if(roz.equals("R1")) idrej=1;
+		if(roz.equals("R2")) idrej=2;
+		if(roz.equals("R3")) idrej=3;
+		if(roz.equals("R4")) idrej=4;
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
@@ -38,15 +38,15 @@ void exe()
 			String pom;
 			pom=roz.substring(1, 2);
 			int p=Integer.valueOf(pom);
-			liczba=Integer.valueOf(m.readMemory(p));
+			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			liczba=pr.A;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			liczba=pr.B;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			liczba=pr.C;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			liczba=pr.D;
 		else
 			liczba=Integer.valueOf(roz);
@@ -65,10 +65,10 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz=="R1") idrej=1;
-		if(roz=="R2") idrej=2;
-		if(roz=="R3") idrej=3;
-		if(roz=="R4") idrej=4;
+		if(roz.equals("R1")) idrej=1;
+		if(roz.equals("R2")) idrej=2;
+		if(roz.equals("R3")) idrej=3;
+		if(roz.equals("R4")) idrej=4;
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
@@ -78,15 +78,15 @@ void exe()
 			String pom;
 			pom=roz.substring(1, 2);
 			int p=Integer.valueOf(pom);
-			liczba=Integer.valueOf(m.readMemory(p));
+			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			liczba=pr.A;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			liczba=pr.B;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			liczba=pr.C;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			liczba=pr.D;
 		else
 			liczba=Integer.valueOf(roz);
@@ -105,10 +105,10 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz=="R1") idrej=1;
-		if(roz=="R2") idrej=2;
-		if(roz=="R3") idrej=3;
-		if(roz=="R4") idrej=4;
+		if(roz.equals("R1")) idrej=1;
+		if(roz.equals("R2")) idrej=2;
+		if(roz.equals("R3")) idrej=3;
+		if(roz.equals("R4")) idrej=4;
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
@@ -118,15 +118,15 @@ void exe()
 			String pom;
 			pom=roz.substring(1, 2);
 			int p=Integer.valueOf(pom);
-			liczba=Integer.valueOf(m.readMemory(p));
+			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			liczba=pr.A;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			liczba=pr.B;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			liczba=pr.C;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			liczba=pr.D;
 		else
 			liczba=Integer.valueOf(roz);
@@ -145,10 +145,10 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz=="R1") idrej=1;
-		if(roz=="R2") idrej=2;
-		if(roz=="R3") idrej=3;
-		if(roz=="R4") idrej=4;
+		if(roz.equals("R1")) idrej=1;
+		if(roz.equals("R2")) idrej=2;
+		if(roz.equals("R3")) idrej=3;
+		if(roz.equals("R4")) idrej=4;
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
@@ -158,15 +158,15 @@ void exe()
 			String pom;
 			pom=roz.substring(1, 2);
 			int p=Integer.valueOf(pom);
-			liczba=Integer.valueOf(m.readMemory(p));
+			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			liczba=pr.A;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			liczba=pr.B;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			liczba=pr.C;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			liczba =pr.D;
 		else
 			liczba=Integer.valueOf(roz);
@@ -191,40 +191,54 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			if(pr.A!=0)
 				pr.counter=Integer.valueOf(roz);
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			if(pr.B!=0)
 				pr.counter=Integer.valueOf(roz);
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			if(pr.C!=0)
 			pr.counter=Integer.valueOf(roz);
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			if(pr.D!=0)
 				pr.counter=Integer.valueOf(roz);
 	} break;
 	case "IC":
 	{
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			pr.A++;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			pr.B++;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			pr.C++;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			pr.D++;
 	} break;
 	case "DC":
 	{
-		if(roz=="R1")
+		if(roz.equals("R1"))
 			pr.A--;
-		if(roz=="R2")
+		if(roz.equals("R2"))
 			pr.B--;
-		if(roz=="R3")
+		if(roz.equals("R3"))
 			pr.C--;
-		if(roz=="R4")
+		if(roz.equals("R4"))
 			pr.D--;
+	} break;
+	case "SR":
+	{
+		roz="";
+		roz=m.readUntilSpace(pr.counter);
+		pr.counter+=roz.length()+1;
+		if(roz.equals("R1"))
+			System.out.println("Wartosc rejestru" + pr.A);
+		if(roz.equals("R2"))
+			System.out.println("Wartosc rejestru" + pr.B);
+		if(roz.equals("R3"))
+			System.out.println("Wartosc rejestru" + pr.C);
+		if(roz.equals("R4"))
+			System.out.println("Wartosc rejestru" + pr.D);
 	} break;
 	case "CF":
 	{
@@ -254,13 +268,13 @@ void exe()
 		pr.counter+=roz.length()+1;
 		String con=m.readUntilSpace(pr.counter);
 		pr.counter+=con.length()+1;
-		if(con=="R1")
+		if(con.equals("R1"))
 			con=Integer.toString(pr.A);
-		if(con=="R2")
+		if(con.equals("R2"))
 			con=Integer.toString(pr.B);
-		if(con=="R3")
+		if(con.equals("R3"))
 			con=Integer.toString(pr.C);
-		if(con=="R4")
+		if(con.equals("R4"))
 			con=Integer.toString(pr.D);
 		f.writeFile(roz, con);
 	} break;
@@ -272,7 +286,7 @@ void exe()
 		process pro = new process(roz);
 		String rez=m.readUntilSpace(pr.counter);
 		pr.counter+=rez.length()+1;
-		pro.exec(roz, rez, null);
+		pro.exec("","",Integer.valueOf(rez));
 		
 	} break;
 	case "DP":
@@ -280,7 +294,8 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		process.kill();
+		process_manager man= new process_manager(); 
+		pr.kill(man.find_name(roz));
 	} break;
 	case "CC":
 	{
