@@ -41,7 +41,14 @@ public class Memory {
 	}
 
 	////////////////////////////////// PUBLICZNE///////////////////////////////////////////////////////////////////
-
+	public void freeMemory() {
+		for (int i = 0; i < 8; i++) {
+			if (!ffa.ffa[i].isFree) {
+				deallocateMemory(ffa.ffa[i].processID);
+			}
+		}
+	}
+	
 	public void writeMemory(int l_addr, char value) {
 		process current = T.find(OBECNY);
 
