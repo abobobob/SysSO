@@ -3,7 +3,10 @@ package sysos;
 import java.util.Scanner;
 
 public class Main {
-
+	
+	public static Memory M = new Memory();
+	public static process_manager P = new process_manager();
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
