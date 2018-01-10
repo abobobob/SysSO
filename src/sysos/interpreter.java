@@ -12,7 +12,8 @@ public class interpreter {
 	}
 void exe()
 {
-	process pr=Main.P.find(Main.OBECNY_PROCES);
+	process pr;
+	schedulerr.check(pr,Main.P);
 	String roz;
 	roz=m.readUntilSpace(pr.counter);
 	pr.counter+=roz.length()+1;
@@ -35,7 +36,7 @@ void exe()
 		if(roz.charAt(0)=='[')
 		{
 			String pom;
-			pom=roz.substring(1, 2);
+			pom=roz.substring(1, 3);
 			int p=Integer.valueOf(pom);
 			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
@@ -75,7 +76,7 @@ void exe()
 		if(roz.charAt(0)=='[')
 		{
 			String pom;
-			pom=roz.substring(1, 2);
+			pom=roz.substring(1, 3);
 			int p=Integer.valueOf(pom);
 			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
@@ -115,7 +116,7 @@ void exe()
 		if(roz.charAt(0)=='[')
 		{
 			String pom;
-			pom=roz.substring(1, 2);
+			pom=roz.substring(1, 3);
 			int p=Integer.valueOf(pom);
 			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
@@ -155,7 +156,7 @@ void exe()
 		if(roz.charAt(0)=='[')
 		{
 			String pom;
-			pom=roz.substring(1, 2);
+			pom=roz.substring(1, 3);
 			int p=Integer.valueOf(pom);
 			liczba=Integer.valueOf(m.readUntilSpace(p));
 		}
@@ -301,13 +302,13 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz.equals("R1")){}
+		if(roz.equals("R1"))
 			
-		if(roz.equals("R2")){}
+		if(roz.equals("R2"))
 			
-		if(roz.equals("R3")){}
+		if(roz.equals("R3"))
 			
-		if(roz.equals("R4")){}
+		if(roz.equals("R4"))
 			
 		
 	} break;
@@ -341,5 +342,6 @@ void exe()
 		pr.kill(pr.PID);
 	}
 	}
+	pr.cpu+=50;
 }
 }

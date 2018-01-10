@@ -8,9 +8,9 @@ import static sysos.process_manager.status.READY;
 public class schedulerr {
 	public int readyp;
 	public schedulerr() {
-		for(Boolean x:whichqs) {
-			x=false;
-		}
+		for(int i=0;i<=127;i++){
+			whichqs.set(i, false);
+			}
 		readyp=0;
 	}
 	private ArrayList<ArrayList<process>> qs = new ArrayList<ArrayList<process>>(128);
@@ -68,7 +68,7 @@ public class schedulerr {
 			return;
 		}
 		if(runningProcess.PID != null) {						//running jako aktualny, 
-			runningProcess=actual;
+			runningProcess=actual;								//zmienia wartoœci cpu procesu running i odk³ada go do kolejki procesów
 			divide_cpu();
 			change_q(runningProcess);
 			runProcess(p);
