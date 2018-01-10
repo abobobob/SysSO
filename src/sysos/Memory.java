@@ -23,8 +23,8 @@ public class Memory {
 	//////////////////////////////// KOSNSTRUKTOR //////////////////////////
 
 	public Memory() { // konstruktor, inicjalizacja
-		T = null; // Shell.T; // tutaj wskazuje na obiekt memory manager
-		OBECNY = null; // Shell.OBECNY_PROCES; // tutaj wskazuje na inta z obecnym procesem
+		T = Main.T; // tutaj wskazuje na obiekt memory manager
+		OBECNY = Main.OBECNY_PROCES; // tutaj wskazuje na inta z obecnym procesem
 		ram = new char[128];
 		for (int i = 0; i < ram.length; i++)
 			ram[i] = ' ';
