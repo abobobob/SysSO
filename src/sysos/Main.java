@@ -24,19 +24,15 @@ public class Main {
 			if(tab[0].equals("DEL"))   ///////////////////////////////////////////////////////////////////usuwanie pliku
 			{
 				if(tab.length==2)
-					//deleteFile(tab[1]);
-					System.out.println("usuwanie pliku");
+					F.deleteFile(tab[1]);
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			
-			
 			if(tab[0].equals("COPY")&&tab[1].equals("NULL"))  ////////////////////////////////////////////tworzenie pustego pliku
 			{
 				if(tab.length==3)
-					//createEmptyFile(tab[2]);
-					System.out.println("tworzenie pustego pliku");
+					F.createFile(tab[2]);
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
@@ -45,58 +41,38 @@ public class Main {
 			if(tab[0].equals("OVR"))  ///////////////////////////////////////////////////////////////////dopisywanie danych do pliku
 			{
 				if(tab.length>2)
-					{String temp = "";
-					for(int i=2;i<tab.length;i++)
-					{
-						temp+=tab[i];
-						temp+=" ";
+				{
+					String temp = "";
+					for (int i = 2; i < tab.length; i++) {
+						temp += tab[i];
+						temp += " ";
 					}
-					//appendToFile(tab[1],temp);
-					System.out.println("dopisywanie danych do pliku");
-					}
+					F.writeFile(tab[1], temp);
+					//System.out.println("dopisywanie danych do pliku");
+				}
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			
-			if(tab[0].equals("CRF"))  ///////////////////////////////////////////////////////////////////tworzenie pliku z dopisaniem danych
-			{
-				if(tab.length>2)
-					{String temp = "";
-					for(int i=2;i<tab.length;i++)
-					{
-						temp+=tab[i];
-						temp+=" ";
-					}
-					//createFileWithContent(tab[1],temp);
-					System.out.println("tworzenie pliku z dopisaniem danych");
-					}
-				else
-					System.out.println("nieprawidlowe wywolanie komendy");
-			}
-			
-			
-			if(tab[0].equals("OPF"))   ////////////////////////////////////////////////////////////////////otwieranie pliku
+			if(tab[0].equals("OPF"))   ///////////////////////////////////////////////////////////////////usuwanie pliku
 			{
 				if(tab.length==2)
-					//getFileContent(tab[1]);
-					System.out.println("otwieranie pliku");
+					F.readFile(tab[1]);
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
-			}
 			
+			}
 			
 			if(tab[0].equals("HELP"))   ////////////////////////////////////////////////////////////////////pomoc
 			{
 				if(tab.length==1) {
-					
 					System.out.println("DEL nazwa_pliku: usuwanie wskazanego pliku; ");
 					System.out.println("COPY NULL nazwa_pliku: tworzenie pustego pliku o wskazanej nazwie; ");
 					System.out.println("OVR nazwa_pliku: dopisanie danych do danego pliku; ");
-					System.out.println("CRF nazwa_pliku dane: tworzenie pliku z dopisaniem danych; ");
-					System.out.println("OPF nazwa_pliku: otwieranie wskazanego pliku; ");
+					System.out.println("OPF nazwa_pliku: czytanie wskazanego pliku; ");
 					System.out.println("MEMORY: sprawdzanie stanu pamieci; ");
 					System.out.println("CHKDSK: sprawdzanie zawarto�ci dysku; ");
+					System.out.println("LS: wyswietlenie plikow; ");
 					System.out.println("TASKLIST: sprawdzanie listy procesow; ");
 					System.out.println("TASKKILL: nazwa_procesu: zabijanie procesu; ");
 					System.out.println("GO: kolejny krok wykonywanego procesu; ");
@@ -125,9 +101,20 @@ public class Main {
 				if(tab.length==1) {
 					
 					//funkcja pokazuj�ca zawarto�� dysku 
-					System.out.println("zawarto�� dysku");
-				
+					System.out.println("zawartosc dysku");
+					F.printDisc();
 					
+				}else
+					System.out.println("nieprawidlowe wywolanie komendy");
+			}
+			
+			if(tab[0].equals("LS"))   //////////////////////////////////////////////////////////////////dysk
+			{
+				if(tab.length==1) {
+					
+					//funkcja pokazuj�ca zawarto�� dysku 
+					System.out.println("Pliki");
+					F.listAllFiles();					
 				}else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
