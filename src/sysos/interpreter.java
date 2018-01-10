@@ -301,13 +301,13 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		if(roz.equals("R1"))
+		if(roz.equals("R1")){}
 			
-		if(roz.equals("R2"))
+		if(roz.equals("R2")){}
 			
-		if(roz.equals("R3"))
+		if(roz.equals("R3")){}
 			
-		if(roz.equals("R4"))
+		if(roz.equals("R4")){}
 			
 		
 	} break;
