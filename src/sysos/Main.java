@@ -87,7 +87,7 @@ public class Main {
 			{
 				if(tab.length==1) {
 					
-					//funkcja pokazuj�ca stan pami�ci 
+					M.printMemory();
 					System.out.println("stan pamieci");
 				
 					
