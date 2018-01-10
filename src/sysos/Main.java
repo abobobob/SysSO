@@ -8,6 +8,7 @@ public class Main {
 	public static process_manager P = new process_manager();
 	public static FileSystem F = new FileSystem();
 	public static int OBECNY_PROCES;
+	public static schedulerr S = new schedulerr();
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -87,7 +88,7 @@ public class Main {
 			{
 				if(tab.length==1) {
 					
-					M.printMemory();
+					//funkcja pokazuj�ca stan pami�ci 
 					System.out.println("stan pamieci");
 				
 					
@@ -147,6 +148,8 @@ public class Main {
 			{
 				if(tab.length==1) {
 					
+					interpreter i =new interpreter(M,F);
+					i.exe();
 					//stan procesu po wykonaniu jednego kroku 
 					System.out.println("kolejny krok w procesie");
 				
