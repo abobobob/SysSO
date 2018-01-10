@@ -6,6 +6,8 @@ public class Main {
 	
 	public static Memory M = new Memory();
 	public static process_manager P = new process_manager();
+	public static FileSystem F = new FileSystem();
+	public static int OBECNY_PROCES;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
