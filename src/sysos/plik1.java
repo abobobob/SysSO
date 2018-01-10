@@ -1,14 +1,11 @@
-package sysos;
+package potoki;
 
-/**
- *
- * @author boromir
- */
+
 public class plik1 {
-    static Potoki[] tab=new Potoki[16];
+    static potoki[] tab=new potoki[16];
     static int rozmiar=16;
     
-       public int finddes()
+       static public int finddes()
        {
            int number=-1;
            for(int i=0;i<16;i++)
@@ -22,17 +19,15 @@ public class plik1 {
            return number;
        }
        
-       void closedes(process p)
+      static void closedes(process p)
        {
-           int numb=p.des[0];
+           int numb=p.des;
            if(tab[numb].readbytes==tab[numb].writebytes)
            {
            tab[numb].open=0;
            for(int i=tab[numb].qfreespace;i>=0;i--)
                tab[numb].myQueue.poll();
            }
-       }
-       
+       }     
     
-       
 }
