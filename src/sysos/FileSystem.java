@@ -2,17 +2,6 @@ package sysos;
 
 import java.util.ArrayList;
 
-/*
- KODY BLEDOW:
-0 - wszystko ok
-1 - plik o podanej nazwie juz istnieje
-2 - brak wolnego bloku
-3 - plik nie znaleziony
-metoda String readFile(String name) zwraca null, gdy wystapi blad 3
-metoda String getFileData(String name) zwraca null, gdy wystapi blad 3
--1 - zwracany przez metode assignIndex(), gdy brak wolnych blokow
-9 - blad nieokreslony
- */
 class File {
 	public String name;
 	public int blockIndex;
@@ -49,10 +38,11 @@ public class FileSystem {
 		root = new Catalog();
 	}
 
-	public int createFile(String name) {
+	public void createFile(String name) {
 		for (File f : root.catalog) {
-			if (f.name == name) {
-				return 1;
+			if (f.name.equals(name)) {
+				System.out.println("Plik o podanej nazwie juz istnieje!");
+				return;
 			}
 		}
 		int tempIndex = assignIndex();
@@ -60,14 +50,14 @@ public class FileSystem {
 			File f = new File(name, tempIndex);
 			root.catalog.add(f);
 		} else {
-			return 2;
+			System.out.println("Brak wolnego bloku!");
+			return;
 		}
-		return 0;
 	}
 
-	public int writeFile(String name, String content) {
+	public void writeFile(String name, String content) {
 		for (File f : root.catalog) {
-			if (f.name == name) {
+			if (f.name.equals(name)) {
 				int neededBlocks = content.length() / nrOfBlocks + 1;
 				int index = 0;
 				for (int i = 0; i < neededBlocks; i++) {
@@ -85,18 +75,19 @@ public class FileSystem {
 							}
 						}
 					} else {
-						return 2;
+						System.out.println("Brak wolnego bloku!");
+						return;
 					}
 				}
-				return 0;
+				return;
 			}
 		}
-		return 3;
+		System.out.println("Plik o podanej nazwie nie istnieje!");
 	}
 
-	public String readFile(String name) {
+	public void readFile(String name) {
 		for (File f : root.catalog) {
-			if (f.name == name) {
+			if (f.name.equals(name)) {
 				String data = "";
 				for (int i = f.blockIndex; i < f.blockIndex + nrOfBlocks; i++) {
 					if (disc[i] != emptySign) {
@@ -108,17 +99,16 @@ public class FileSystem {
 						}
 					}
 				}
-				return data;
+				System.out.println(data);
+				return;
 			}
 		}
-		// System.out.println("ERROR - file " + name + " not found");
-		return null;
+		System.out.println("Plik o podanej nazwie nie istnieje");
 	}
 
-	public int deleteFile(String name) {
+	public void deleteFile(String name) {
 		for (File f : root.catalog) {
-			if (f.name == name) {
-
+			if (f.name.equals(name)) {
 				for (int i = f.blockIndex; i < f.blockIndex + nrOfBlocks; i++) {
 					if (disc[i] != emptySign) {
 						int currentBlockNr = (int) disc[i];
@@ -131,21 +121,27 @@ public class FileSystem {
 				}
 				bitVector[f.blockIndex / nrOfBlocks] = false;
 				root.catalog.remove(f);
-				return 0;
+				return;
 			}
-			return 3;
+			System.out.println("Plik o podanej nazwie nie istnieje");
+			return;
 		}
-		return 9;
 	}
 
-	public String getFileData(String name) {
+	public void listAllFiles() {
+		for(File f : root.catalog) {
+			System.out.println(f.name + " " + f.blockIndex);
+		}
+	}
+	
+	public void printFileData(String name) {
 		for (File f : root.catalog) {
-			if (f.name == name) {
-				return f.name + " " + f.blockIndex;
+			if (f.name.equals(name)) {
+				System.out.println(f.name + " " + f.blockIndex);
+				return;
 			}
 		}
-		// System.out.println("ERROR - file " + name + " not found");
-		return null;
+		System.out.println("Plik o podanej nazwie nie istnieje");
 	}
 
 	private int assignIndex() {
