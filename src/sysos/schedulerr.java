@@ -7,15 +7,20 @@ import static sysos.process_manager.status.READY;
 
 public class schedulerr {
 	public int readyp;
+	private ArrayList<Boolean> whichqs = new ArrayList<Boolean>();
 	public schedulerr() {
-		for(int i=0;i<=127;i++){
-			whichqs.set(i, false);
-			}
+		for(int i=0;i<128;i++){
+			whichqs.add(false);
+		}
 		readyp=0;
+		for(int i=0;i<128;i++){
+			ArrayList<process> p=new ArrayList<process>();
+			qs.add(p);
+		}
 	}
 	private ArrayList<ArrayList<process>> qs = new ArrayList<ArrayList<process>>(128);
-	private ArrayList<Boolean> whichqs = new ArrayList<Boolean>(128);
-	public process runningProcess;
+
+	public process runningProcess = Main.T.new process("");
 	
 	public void add_to_q(process x) {
 		if(x.usrpri==null) {
@@ -28,7 +33,7 @@ public class schedulerr {
 	
 	private void divide_cpu() {
 		for(int i=0; i<128;i++) {
-			for(int j=0;j<qs.get(i).size()-1;j++) {
+			for(int j=0;j<qs.get(i).size();j++) {
 				if(qs.get(i).get(j).cpu>0)
                                 qs.get(i).get(j).cpu /= 2;
 			}
@@ -57,11 +62,13 @@ public class schedulerr {
 		process x=qs.get(i).get(0);
 		runningProcess=x;
 		runningProcess.change_process_state(ACTIVE);
+		runningProcess.Lock=false;
 		qs.get(i).remove(0);		
 	}
 
 	public void check(process actual, process_manager p) {
-		actual.change_process_state(READY);						
+		actual.change_process_state(READY);		
+		actual.Lock=true;
 		if(runningProcess.PID == null) {						//jesli zaden proces nie jest running wchodzi do runProcess gdzie wlacza sie proces z najnizszym priorytetem
 			runProcess(p);										//aktualny jako running
 			actual=runningProcess;

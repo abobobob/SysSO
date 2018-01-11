@@ -13,8 +13,8 @@ public class interpreter {
 	}
 void exe()
 {
-	process pr=Main.P.find(0);
-	Main.S.check(pr, Main.P);
+	process pr=Main.T.new process("");
+	Main.S.check(pr, Main.T);
 	String roz;
 	roz=m.readUntilSpace(pr.counter);
 	pr.counter+=roz.length()+1;
@@ -260,7 +260,7 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		System.out.println(f.readFile(roz));
+		f.readFile(roz);
 	} break;
 	case "WF":
 	{
@@ -284,11 +284,14 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		process pro = Main.P.new process(roz);
-		String rez=m.readUntilSpace(pr.counter);
-		pr.counter+=rez.length()+1;
-		pro.exec("","",Integer.valueOf(rez));
-		
+		String ro=m.readUntilSpace(pr.counter);
+		pr.counter+=ro.length()+1;
+		pr.fork(roz);
+		process p = Main.T.new process("");
+		int i;
+		i=Main.T.find_name(roz);
+		p=Main.T.find(i);
+		p.exec("", "", Integer.valueOf(ro));
 	} break;
 	case "DP":
 	{
@@ -321,24 +324,16 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		String roz2=m.readUntilSpace(pr.counter);
-		pr.counter+=roz2.length()+1;
 		if(pr.next.equals(null))
-			pr.fork();
+			pr.fork(roz);
 		potoki.pipe(pr);
 	} break;
 	case "SC":
 	{
-		roz="";
-		roz=m.readUntilSpace(pr.counter);
-		pr.counter+=roz.length()+1;
 		potoki.write(pr);
 	} break;
 	case "RC":
 	{
-		roz="";
-		roz=m.readUntilSpace(pr.counter);
-		pr.counter+=roz.length()+1;
 		potoki.read(pr.next);
 	} break;
 	case "EX":

@@ -104,10 +104,10 @@ public class process_manager {
         INIT.next = null;
     }
 
-    //klasa zagnieĹĽdĹĽona procesu
+    //klasa zagnie�d�ona procesu
     public class process {
 
-        //wskaĹşniki na procesy pokrewne
+        //wska�niki na procesy pokrewne
         public process father, big_bro, little_bro, child;
 
         //ID
@@ -127,7 +127,7 @@ public class process_manager {
         public int des;
         public boolean res_flag;
         public process previous, next;
-
+        public boolean Lock;
         //kontekst procesu
         public int A, B, C, D, counter;
 
@@ -150,6 +150,7 @@ public class process_manager {
             this.C = 0;
             this.D = 0;
             this.counter = 0;
+            this.Lock = true;
         }
 
         public void change_process_state(status status) {
@@ -182,12 +183,14 @@ public class process_manager {
             }
         }
 
-        public int fork() {
+        public int fork(String nazwa) {
+        	
             //utworzenie nowego procesu i nadanie mu nazwy
-            String n_name = this.name + 'c';
-            process p = new process(n_name);
+        	
+            //String n_name = this.name + 'c';
+            process p = new process(nazwa);
             p.PID = free_PID();
-            //pamiÄ™Ä‡
+            //pami��
             //if (reserve_m(this.name, this.name, "") != false) {
             p.s = status.READY;
             Random gen = new Random();
@@ -220,11 +223,11 @@ public class process_manager {
             p2.next = p;
             p.next = null;
             p.previous = p2;
-            //jeĹ›li proces zostaĹ‚ poprawnie utworzony
+            //je�li proces zosta� poprawnie utworzony
             System.out.println("Utworzono proces potomny o PID: " + p.PID);
             //show_process(p.PID);
             return p.PID;
-            //} //jeĹ›li nie zostaĹ‚
+            //} //je�li nie zosta�
             /*else {
              System.out.println("Nie utworzono procesu potomnego!");
 
@@ -233,9 +236,9 @@ public class process_manager {
         }
 
         public boolean exec(String code, String path, int size) {
-            //sprawdzenie pamiÄ™ci
+            //sprawdzenie pami�ci
             //if (reserve_m(this.name, this.name, path)) {
-            //reset skĹ‚adowych
+            //reset sk�adowych
             this.A = 0;
             this.B = 0;
             this.C = 0;
@@ -244,7 +247,7 @@ public class process_manager {
             this.code = code;
             this.programSize = size;
             this.s = status.READY;
-            System.out.println("Proces o PID: " + this.PID + " otrzymaĹ‚ nowy kod do wykonania.");
+            System.out.println("Proces o PID: " + this.PID + " otrzyma� nowy kod do wykonania.");
             return true;
             //} else {
             //  return false;
@@ -255,20 +258,21 @@ public class process_manager {
             int temp = -1;
             exit e = new exit();
             if (this.s == status.ZOMBIE) {
-                System.out.println("Proces z PID: " + this.PID + " nie istnieje, wiÄ™c nie moĹĽna wywoĹ‚aÄ‡ tej metody na jego dziecku.");
+                System.out.println("Proces z PID: " + this.PID + " nie istnieje, wi�c nie mo�na wywo�a� tej metody na jego dziecku.");
             } else {
                 if (this.child != null) {
-                    //sprawdzenie czy proces jest na liĹ›cie zakoĹ„czonych
+                    //sprawdzenie czy proces jest na li�cie zako�czonych
                     for (int i = 0; i < ex.size(); i++) {
                         e = ex.get(i);
                         if (e.who == this.child.PID) {
                             temp = i;
                         }
                     }
-                    //jeĹ›li jest
+                    //je�li jest
                     if (temp >= 0) {
                         e.res = 1;
-                        //usuniÄ™cie go z listy
+                        int x = this.child.PID;
+                        //usuni�cie go z listy
                         process p = INIT;
                         while (p.next != null) {
                             p = p.next;
@@ -289,19 +293,33 @@ public class process_manager {
                                 for (int i = 0; i < ex.size(); i++) {
                                     if (ex.get(i).who == this.child.PID) {
                                         ex.remove(i);
-                                        return true;
+                                        break;
                                     }
                                 }
                             }
                         }
-                        //jeĹ›li nie ma
+                        this.child = null;
+                        this.s = status.ACTIVE;
+                        System.out.println("Usuni�to proces potomny o PID: " + x + " bo by� w stanie ZOMBIE," +
+                                " a proces o PID: " + this.PID + " nie zmieni� stanu.");
+                        //je�li nie ma
                     } else {
+                        //je�li ACTIVE zczytujemy rejestry i licznik
                         if (this.s == status.ACTIVE) {
+//OJJJJ
+//OJJJJ
+//OJJJJ
+//OJJJJ
+//OJJJJ
                             //read_context();
                         }
+                        //zmieniamy stan na WAITING je�li to nie init
                         if (this.PID != 0) {
                             this.s = status.WAITING;
                         }
+                        System.out.println("Proces o PID: " + this.PID + " zmienia stan an WAITING " +
+                                "i czeka na zako�czenie potomka o PID: " + this.child.PID + ".");
+                        //dodanie do listy oczekuj�cych
                         wait w = new wait();
                         w.who = this.PID;
                         w.for_who = this.child.PID;
@@ -317,14 +335,37 @@ public class process_manager {
         public boolean exit(int stat) {
             boolean del = false;
             int temp = -1;
+            if (this.child != null) {
+                if (this.child.s == status.ZOMBIE) {
+                    this.child.s = status.TERMINATED;
+                    process p5 = this.child.previous;
+                    if (this.child.next != null) {
+                        process p6 = this.child.next;
+                        p6.previous = p5;
+                        p5.next = p6;
+                    } else {
+                        p5.next = null;
+                    }
+                    this.child.previous = null;
+                    this.child.next = null;
+                    System.out.println("Dziecko procesu o PID: " + this.PID + " czyli " + this.child.PID + "zmienił stan na TERMINATED.");
+                }
+                for (int i = 0; i < ex.size(); i++) {
+                    if (ex.get(i).who == this.child.PID) {
+                        ex.remove(i);
+                        break;
+                    }
+                }
+            }
             wait w = new wait();
+            //czy wykonano wait_PID
             for (int i = 0; i < wa.size(); i++) {
                 w = wa.get(i);
                 if (w.for_who == this.PID) {
                     temp = i;
                 }
             }
-            //jeĹ›li wykonano wait_PID
+            //jeśli wykonano wait_PID
             if (temp >= 0) {
                 boolean only = true;
                 //czy tylko na ten
@@ -334,8 +375,9 @@ public class process_manager {
                         only = false;
                     }
                 }
-                //jeĹ›li jeszcze na jakiĹ›
+                //jeśli jeszcze na jakiś
                 if (only == false) {
+                    Main.M.deallocateMemory(this.PID);
                     if (free_m(this.name)) {
                         for (int i = 0; i < wa.size(); i++) {
                             if (wa.get(i).for_who == this.PID) {
@@ -351,7 +393,7 @@ public class process_manager {
                             }
                         }
                         this.s = status.TERMINATED;
-                        //zmiana wskaĹşnikĂłw na liĹ›cie
+                        //zmiana wskaźników na liście
                         process p1 = this.next;
                         process p2 = this.previous;
                         p1.previous = p2;
@@ -359,20 +401,26 @@ public class process_manager {
                         this.previous = null;
                         this.next = null;
                         p1 = p2 = null;
-                        //jeĹ›li ma dzieci
+                        if (this.little_bro != null) {
+                            this.little_bro.big_bro = this.big_bro;
+                        }
+                        if (this.big_bro != null) {
+                            this.big_bro.little_bro = this.little_bro;
+                        }
+                        //jeśli ma dzieci
                         if (this.child != null) {
                             process p = this.child;
                             p.PPID = 0;
-                            //doĹ‚Ä…czenie do dzieci inita
+                            //dołączenie do dzieci inita
                             if (INIT.child != null) {
-                                //doĹ‚Ä…czenie do najmĹ‚odszego
+                                //dołączenie do najmłodszego
                                 process p4 = INIT.child;
                                 while (p4.little_bro != null) {
                                     p4 = p4.little_bro;
                                 }
                                 p4.little_bro = p;
                                 p.big_bro = p4;
-                                //jeĹ›li ma rodzeĹ„stwo
+                                //jeśli ma rodzeństwo
                                 if (this.big_bro != null) {
                                     process p3 = this.big_bro;
                                     p3.little_bro = this.little_bro;
@@ -388,17 +436,28 @@ public class process_manager {
                                 p.PPID = 0;
                             }
                         }
-                        System.out.println("UsuniÄ™to proces o PID: " + this.PID + ".");
+                        System.out.println("Usunięto proces o PID: " + this.PID + ".");
                         //FINALIZE
                         del = true;
                         return del;
                     } else {
-                        System.out.println("BĹ‚Ä…d zwalniania pamiÄ™ci!");
+                        System.out.println("Błąd zwalniania pamięci!");
                     }
                 }
-                //jeĹ›li nie wykonano wait_PID
+                //jeśli nie wykonano wait_PID
             } else {
+                Main.M.deallocateMemory(this.PID);
                 if (free_m(this.name)) {
+                    for (int i = 0; i < wa.size(); i++) {
+                        if (wa.get(i).for_who == this.PID) {
+                            process p = INIT;
+                            while (p.next != null) {
+                                p = p.next;
+
+                            }
+
+                        }
+                    }
                     this.s = status.ZOMBIE;
                     if (this.child != null) {
                         process p = this.child;
@@ -409,14 +468,14 @@ public class process_manager {
                         }
                         p = this.child;
                         if (INIT.child != null) {
-                            //do najmĹ‚odszego
+                            //do najmłodszego
                             process p2 = INIT.child;
                             while (p2.little_bro != null) {
                                 p2 = p2.little_bro;
                             }
                             p2.little_bro = p;
                             p.big_bro = p2;
-                            //jeĹ›li ma rodzeĹ„stwo
+                            //jeśli ma rodzeństwo
                             if (this.big_bro != null) {
                                 process p3 = this.big_bro;
                                 p3.little_bro = this.little_bro;
@@ -427,33 +486,32 @@ public class process_manager {
                     e.who = this.PID;
                     e.res = stat;
                     ex.add(e);
-                    System.out.println("Na procesie nie wykonano jeszcze metody wait_PID, wiÄ™c zostaĹ‚ dodany do listy procesĂłw ZOMBIE.");
+                    System.out.println("Na procesie nie wykonano jeszcze metody wait_PID, więc został dodany do listy procesów ZOMBIE.");
                     del = true;
                     return del;
                 } else {
-                    System.out.println("Na procesie nie wykonano metody wait_PID, jednak wystÄ…piĹ‚ bĹ‚Ä…d pamiÄ™ci!");
+                    System.out.println("Na procesie nie wykonano metody wait_PID, jednak wystąpił błąd pamięci!");
                 }
             }
             //NWM MAX
             return false;
         }
-//tu
 
         public boolean kill(int pid) {
             if (pid == 0) {
-                System.out.println("Ta operacja spowoduje zamkniÄ™cie systemu!\nCzy na pewno chcesz jÄ… wykonaÄ‡?\n1- Tak/0 - Nie");
+                System.out.println("Ta operacja spowoduje zamkni�cie systemu!\nCzy na pewno chcesz j� wykona�?\n1- Tak/0 - Nie");
                 int c;
                 Scanner s = new Scanner(System.in);
                 c = s.nextInt();
                 if (c == 1) {
                     System.out.println("Zamykanie systemu...");
-                    //FUNKCJA ZWALNIAJÄ„CA CAĹ�Ä„ PAMIÄ�Ä†
+                    //FUNKCJA ZWALNIAJ�CA CA�� PAMI��
                     System.exit(0);
                 }
                 if (c == 0) {
                     System.out.println("Anulowano.");
                 } else {
-                    System.out.println("Wprowadzono zĹ‚e dane!");
+                    System.out.println("Wprowadzono z�e dane!");
                 }
             }
             process p = INIT;
@@ -481,7 +539,7 @@ public class process_manager {
                             }
                             p.child.previous = null;
                             p.child.next = null;
-                            System.out.println("Dziecko procesu " + p.PID + "zostaĹ‚o usuniÄ™te.");
+                            System.out.println("Dziecko procesu " + p.PID + "zosta�o usuni�te.");
                         }
                         for (int i = 0; i < ex.size(); i++) {
                             if (ex.get(i).who == p.child.PID) {
@@ -490,9 +548,9 @@ public class process_manager {
                             }
                         }
                     }
-                    //jeĹ›li ma stan zombie
+                    //je�li ma stan zombie
                     if (p.s == status.ZOMBIE) {
-                        System.out.println("Ten proces jest w stanie ZOMBIE, wiÄ™c usuniÄ™tÄ™ zostanÄ… tylko jego powiÄ…zania.");
+                        System.out.println("Ten proces jest w stanie ZOMBIE, wi�c usuni�t� zostan� tylko jego powi�zania.");
                         process p2 = p.previous;
                         if (p.next != null) {
                             process p1 = p.next;
@@ -522,7 +580,7 @@ public class process_manager {
                     }
                 }
 
-                //jeĹ›li tak
+                //je�li tak
                 if (temp >= 0) {
                     boolean only = true;
 
@@ -533,7 +591,7 @@ public class process_manager {
                             only = false;
                         }
                     }
-                    //jeĹ›li na kogoĹ› jeszcze
+                    //je�li na kogo� jeszcze
                     if (only == false) {
                         if (free_m(p.name)) {
                             for (int i = 0; i < wa.size(); i++) {
@@ -550,7 +608,7 @@ public class process_manager {
                                 }
                             }
                             p.s = status.TERMINATED;
-                            //zmiana wskaĹşnikĂłw
+                            //zmiana wska�nik�w
                             process p2 = p.previous;
                             if (p.next != null) {
                                 process p1 = p.next;
@@ -567,20 +625,20 @@ public class process_manager {
                             if (p.big_bro != null) {
                                 p.big_bro.little_bro = p.little_bro;
                             }
-                            //jeĹ›li ma dzieci
+                            //je�li ma dzieci
                             if (p.child != null) {
                                 process t = p.child;
                                 t.PPID = 0;
-                                //doĹ‚Ä…czenie do dzieci inita
+                                //do��czenie do dzieci inita
                                 if (INIT.child != null) {
-                                    //doĹ‚Ä…czenie mĹ‚odszego brata
+                                    //do��czenie m�odszego brata
                                     process p4 = INIT.child;
                                     while (p4.little_bro != null) {
                                         p4 = p4.little_bro;
                                     }
                                     p4.little_bro = t;
                                     t.big_bro = p4;
-                                    //jeĹ›li ma rodzieĹ„stwo
+                                    //je�li ma rodzie�stwo
                                     if (p.big_bro != null) {
                                         process p3 = p.big_bro;
                                         p3.little_bro = p.little_bro;
@@ -596,14 +654,14 @@ public class process_manager {
                                     t.PPID = 0;
                                 }
                             }
-                            System.out.println("UsuniÄ™to proces o PID: " + p.PID + ".");
+                            System.out.println("Usuni�to proces o PID: " + p.PID + ".");
                             //FINALIZE
                             //p.finalize();
                             //p = null;
                             del = true;
                             return del;
                         } else {
-                            System.out.println("BĹ‚Ä…d zwalniania pamiÄ™ci!");
+                            System.out.println("B��d zwalniania pami�ci!");
                         }
                     } else {
                         if (free_m(p.name)) {
@@ -615,13 +673,21 @@ public class process_manager {
                             }
                             //zmiana statusu
                             p.s = status.TERMINATED;
-                            //zmiana statusu ojca na READY, bo tylko na ten proces czekaĹ‚
+                            //zmiana statusu ojca na READY, bo tylko na ten proces czeka�
+//TUTAJJJJJ
+//TUTAJJJJJ
+//TUTAJJJJJ
+//TUTAJJJJJ
 //TUTAJJJJJ
                             p.father.s = status.READY;
-                            if(p.father.child==p){
-
+                            if (p.father.child == p) {
+                                if (p.little_bro != null) {
+                                    p.father.child = p.little_bro;
+                                } else {
+                                    p.father.child = null;
+                                }
                             }
-
+                            //zmiana wska�nik�w na li�cie
                             process p2 = p.previous;
                             if (p.next != null) {
                                 process p1 = p.next;
@@ -632,19 +698,20 @@ public class process_manager {
                             }
                             p.previous = null;
                             p.next = null;
-
+                            //je�li nie ma dzieci
                             if (p.child != null) {
                                 process t = p.child;
-                                t.PPID = 1;
-
+                                t.PPID = 0;
+                                //do��czenie do dzieci inita
                                 if (INIT.child != null) {
+                                    //do��czenie m�odszego brata
                                     p2 = INIT.child;
                                     while (p2.little_bro != null) {
                                         p2 = p2.little_bro;
                                     }
                                     p2.little_bro = t;
                                     t.big_bro = p2;
-
+                                    //je�li ma rodzie�stwo
                                     if (p.big_bro != null) {
                                         process p3 = p.big_bro;
                                         p3.little_bro = p.little_bro;
@@ -654,43 +721,62 @@ public class process_manager {
                                         p3.big_bro = p.big_bro;
                                     }
                                 }
-
+                                //zmiana PPID dzieci
                                 while (t.little_bro != null) {
                                     t = t.little_bro;
-                                    t.PPID = 1;
+                                    t.PPID = 0;
                                 }
                             }
 
-                            System.out.println("Proces o PID: " + p.PID + "zostaĹ‚ usuniÄ™ty.");
+                            System.out.println("Proces o PID: " + p.PID + "zosta� usuni�ty.");
                             //FINALIZE
                             del = true;
                             return del;
                         } else {
-                            System.out.println("BĹ‚Ä…d zwalniania pamiÄ™ci!");
+                            System.out.println("B��d zwalniania pami�ci!");
                         }
                     }
+                    //je�li nie wykonano jeszcze wait_PID
                 } else {
                     if (free_m(p.name)) {
-
+                        if (p.father.child == p) {
+                            if (p.little_bro != null) {
+                                p.father.child = p.little_bro;
+                            } else {
+                                p.father.child = null;
+                            }
+                        }
+                        //zmiana statusu
                         p.s = status.TERMINATED;
-                        process z = p.next;
-                        process v = p.previous;
-                        z.previous = v;
-                        v.next = z;
-                        p.next = null;
+                        process p2 = p.previous;
+                        if (p.next != null) {
+                            process p1 = p.next;
+                            p1.previous = p2;
+                            p2.next = p1;
+                        } else {
+                            p2.next = null;
+                        }
                         p.previous = null;
+                        p.next = null;
+                        if (p.little_bro != null) {
+                            p.little_bro.big_bro = p.big_bro;
+                        }
+                        if (p.big_bro != null) {
+                            p.big_bro.little_bro = p.little_bro;
+                        }
                         if (p.child != null) {
                             process t = p.child;
-                            t.PPID = 1;
-
+                            t.PPID = 0;
+                            //do��czenie dzieci do inita
                             if (INIT.child != null) {
-                                process p2 = INIT.child;
+                                //do��czenie m�odszego brata
+                                p2 = INIT.child;
                                 while (p2.little_bro != null) {
                                     p2 = p2.little_bro;
                                 }
                                 p2.little_bro = t;
                                 t.big_bro = p2;
-
+                                //je�li ma rodze�stwo
                                 if (p.big_bro != null) {
                                     process p3 = p.big_bro;
                                     p3.little_bro = p.little_bro;
@@ -700,22 +786,22 @@ public class process_manager {
                                     p3.big_bro = p.big_bro;
                                 }
                             }
-
+                            //zmiana PID dzieci
                             while (t.little_bro != null) {
                                 t = t.little_bro;
-                                t.PPID = 1;
+                                t.PPID = 0;
                             }
                         }
-
+                        //dodanie procesu do listy zako�czonych
                         exit e = new exit();
                         e.who = p.PID;
                         e.res = 0;
                         ex.add(e);
-                        System.out.println("Na procesie nie wykonano jeszcze metody wait_PID, wiÄ™c zostaĹ‚ dodany do listy procesĂłw ZOMBIE.");
+                        System.out.println("Na procesie nie wykonano jeszcze metody wait_PID, wi�c zosta� dodany do listy proces�w ZOMBIE.");
                         del = true;
                         return del;
                     } else {
-                        System.out.println("Na procesie nie wykonano metody wait_PID, jednak wystÄ…piĹ‚ bĹ‚Ä…d pamiÄ™ci!");
+                        System.out.println("Na procesie nie wykonano metody wait_PID, jednak wyst�pi� b��d pami�ci!");
                     }
                 }
 
@@ -776,9 +862,9 @@ public class process_manager {
                 }
 
                 if (p1.little_bro != null) {
-                    System.out.println("PID mĹ‚odszego brata: " + p1.little_bro.PID);
+                    System.out.println("PID m�odszego brata: " + p1.little_bro.PID);
                 } else {
-                    System.out.println("Proces nie ma mĹ‚odszego brata.");
+                    System.out.println("Proces nie ma m�odszego brata.");
                 }
                 if (p1.big_bro != null) {
                     System.out.println("PID starszego brata: " + p1.big_bro.PID);

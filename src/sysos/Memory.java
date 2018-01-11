@@ -24,7 +24,7 @@ public class Memory {
 	//////////////////////////////// KOSNSTRUKTOR //////////////////////////
 
 	public Memory() { // konstruktor, inicjalizacja
-		T = Main.P; // Shell.T; // tutaj wskazuje na obiekt memory manager
+		T = Main.T; // Shell.T; // tutaj wskazuje na obiekt memory manager
 	//	OBECNY = Main.OBECNY_PROCES; // Shell.OBECNY_PROCES; // tutaj wskazuje na inta z obecnym procesem
 		
 		ram = new char[128];
@@ -130,7 +130,7 @@ public class Memory {
 	}
 
 	//////////////////////////////// METODY_MOJE///////////////////////////////////////////////////////
-	private void putPageToSwap(int victim, int place) { // umieszcza stronÄ‚Ĺž w podanym miejscu w pliku wymiany
+	private void putPageToSwap(int victim, int place) { // umieszcza stronĂŞ w podanym miejscu w pliku wymiany
 		String toPut = new String();
 		for (int i = victim * 16; i < (victim * 16) + 16; i++) {
 			toPut += ram[i];
@@ -156,7 +156,7 @@ public class Memory {
 		}
 	}
 
-	private String getPageFromSwap(int pageNumber) { // zwraca stronÄ‚Ĺž o danym numerze z pliku wymiany
+	private String getPageFromSwap(int pageNumber) { // zwraca stronĂŞ o danym numerze z pliku wymiany
 		String out = new String();
 		try {
 			FileInputStream fis = new FileInputStream(swap);
@@ -222,7 +222,7 @@ public class Memory {
 		}
 	}
 
-	public char readMemory(int l_addr) { // zwraca char z pamiÄ‚Ĺžci
+	public char readMemory(int l_addr) { // zwraca char z pamiĂŞci
 		process current = Main.S.runningProcess;
 
 		if (l_addr > getProgramSize(current)) {
