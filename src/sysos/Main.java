@@ -90,7 +90,7 @@ public class Main {
 					
 					//funkcja pokazuj�ca stan pami�ci 
 					System.out.println("stan pamieci");
-				
+					M.printMemory();
 					
 				}else
 					System.out.println("nieprawidlowe wywolanie komendy");
