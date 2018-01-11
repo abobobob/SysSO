@@ -19,12 +19,14 @@ public class Memory {
 	public Stack<Integer> lruStack; // stos do LRU
 	public int SWAP_END = 1;
 	private process_manager T;
-	private Integer OBECNY;
+	//private process OBECNY = Main.S.runningProcess;
+	//private Integer OBECNY = T.find(Main.S.runningProcess);
 	//////////////////////////////// KOSNSTRUKTOR //////////////////////////
 
 	public Memory() { // konstruktor, inicjalizacja
-		T = Main.T; // tutaj wskazuje na obiekt memory manager
-		OBECNY = Main.OBECNY_PROCES; // tutaj wskazuje na inta z obecnym procesem
+		T = Main.P; // Shell.T; // tutaj wskazuje na obiekt memory manager
+	//	OBECNY = Main.OBECNY_PROCES; // Shell.OBECNY_PROCES; // tutaj wskazuje na inta z obecnym procesem
+		
 		ram = new char[128];
 		for (int i = 0; i < ram.length; i++)
 			ram[i] = ' ';
@@ -50,7 +52,7 @@ public class Memory {
 	}
 	
 	public void writeMemory(int l_addr, char value) {
-		process current = T.find(OBECNY);
+		process current = Main.S.runningProcess;
 
 		if (l_addr > getProgramSize(current)) {
 			System.out.println("ADRES LOGICZNY WIEKSZY NIZ ROZMIAR PROGRAMU");
@@ -76,14 +78,14 @@ public class Memory {
 		}
 		current.pageEnable(strona, free);
 		ramka = current.pageCheck(strona);
-		ffa.occupyFrame(ramka, OBECNY);
+		ffa.occupyFrame(ramka, Main.S.runningProcess.id);
 		updateStack(ramka);
 
 		ram[ramka * 16 + l_addr % 16] = value;
 	}
 
 	public void allocateMemory(String program, int size) { // Wpisuje program do pliku wymiany
-		process pcb = T.find(OBECNY);
+		process pcb = Main.S.runningProcess;
 		pcb.createPageTable(size);
 		pcb.swapFileBeginning = SWAP_END;
 		pcb.programSize = size;
@@ -128,7 +130,7 @@ public class Memory {
 	}
 
 	//////////////////////////////// METODY_MOJE///////////////////////////////////////////////////////
-	private void putPageToSwap(int victim, int place) { // umieszcza stronĂŞ w podanym miejscu w pliku wymiany
+	private void putPageToSwap(int victim, int place) { // umieszcza stronÄ‚Ĺž w podanym miejscu w pliku wymiany
 		String toPut = new String();
 		for (int i = victim * 16; i < (victim * 16) + 16; i++) {
 			toPut += ram[i];
@@ -154,7 +156,7 @@ public class Memory {
 		}
 	}
 
-	private String getPageFromSwap(int pageNumber) { // zwraca stronĂŞ o danym numerze z pliku wymiany
+	private String getPageFromSwap(int pageNumber) { // zwraca stronÄ‚Ĺž o danym numerze z pliku wymiany
 		String out = new String();
 		try {
 			FileInputStream fis = new FileInputStream(swap);
@@ -185,7 +187,7 @@ public class Memory {
 	}
 
 	private int getProgramSize() { // zwraca rozmiar obecnego programu
-		return T.find(OBECNY).programSize;
+		return Main.S.runningProcess.programSize;
 	}
 
 	private int getProgramSize(process p) { // zwraca rozmiar programu o podanym PCB
@@ -220,8 +222,8 @@ public class Memory {
 		}
 	}
 
-	public char readMemory(int l_addr) { // zwraca char z pamiĂŞci
-		process current = T.find(OBECNY);
+	public char readMemory(int l_addr) { // zwraca char z pamiÄ‚Ĺžci
+		process current = Main.S.runningProcess;
 
 		if (l_addr > getProgramSize(current)) {
 			System.out.println("ADRES LOGICZNY WIEKSZY NIZ ROZMIAR PROGRAMU");
@@ -250,8 +252,8 @@ public class Memory {
 			ram[i] = toPut.charAt(j);
 		}
 		current.pageEnable(strona, free);
-		ramka = T.find(OBECNY).pageCheck(strona);
-		ffa.occupyFrame(ramka, OBECNY);
+		ramka = Main.S.runningProcess.pageCheck(strona);
+		ffa.occupyFrame(ramka, Main.S.runningProcess.id);
 		updateStack(ramka);
 
 		int doZwrotu = ramka * 16 + l_addr % 16;
