@@ -1,5 +1,5 @@
 package sysos;
-
+//xd
 import sysos.process_manager.process;
 
 public class plik1 {
