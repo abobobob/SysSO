@@ -5,6 +5,7 @@ import sysos.process_manager.process;
 public class interpreter {
 	public Memory m = new Memory();
 	public FileSystem f = new FileSystem();
+	public schedulerr s = new schedulerr();
 	interpreter(Memory m, FileSystem f)
 	{
 		this.m=m;
@@ -12,8 +13,8 @@ public class interpreter {
 	}
 void exe()
 {
-	process pr;
-	schedulerr.check(pr,Main.P);
+	process pr=Main.P.find(0);
+	Main.S.check(pr, Main.P);
 	String roz;
 	roz=m.readUntilSpace(pr.counter);
 	pr.counter+=roz.length()+1;
@@ -283,7 +284,7 @@ void exe()
 		roz="";
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
-		process pro = new process(roz);
+		process pro = Main.P.new process(roz);
 		String rez=m.readUntilSpace(pr.counter);
 		pr.counter+=rez.length()+1;
 		pro.exec("","",Integer.valueOf(rez));
@@ -303,14 +304,17 @@ void exe()
 		roz=m.readUntilSpace(pr.counter);
 		pr.counter+=roz.length()+1;
 		if(roz.equals("R1"))
-			
+			pr.zapisdoprocesu(Integer.toString(pr.A));
 		if(roz.equals("R2"))
-			
+			pr.zapisdoprocesu(Integer.toString(pr.B));
 		if(roz.equals("R3"))
-			
+			pr.zapisdoprocesu(Integer.toString(pr.C));
 		if(roz.equals("R4"))
-			
-		
+			pr.zapisdoprocesu(Integer.toString(pr.D));
+		if(!roz.equals("R1") && roz.equals("R2") && roz.equals("R3") && roz.equals("R4"))
+		{
+			pr.zapisdoprocesu(roz);
+		}
 	} break;
 	case "CC":
 	{
