@@ -123,9 +123,8 @@ public class FileSystem {
 				root.catalog.remove(f);
 				return;
 			}
-			System.out.println("Plik o podanej nazwie nie istnieje");
-			return;
 		}
+		System.out.println("Plik o podanej nazwie nie istnieje");
 	}
 
 	public void listAllFiles() {
@@ -163,6 +162,15 @@ public class FileSystem {
 			}
 		}
 	}
+	
+	public void printSector(int blockI) {
+		int blockRange = blockI*nrOfBlocks;
+		for (int i = blockRange; i < blockRange+32; i++) {
+			if ((i + 1) % 8 == 0) {
+				System.out.println(disc[i]);
+			} else {
+				System.out.print(disc[i]);
+			}
+		}
+	}
 }
-
-
