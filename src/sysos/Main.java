@@ -17,15 +17,39 @@ public class Main {
 	public static void main(String[] args) {
 		T.init();
 		String string;
+		Scanner in = new Scanner(System.in);
 		do {
-			System.out.println("command: ");
+			System.out.print("user@sos:~$ ");
 			
-			Scanner in = new Scanner(System.in);
 			string = in.nextLine();
 			String[] tab = string.split(" ");
+			if(tab.length > 0) {
+				tab[0] = tab[0].toUpperCase();
+			}
 			
+			if(tab[0].equals("HELP"))
+			{
+				if(tab.length==1) {
+					System.out.println("DF nazwa_pliku: usuwanie wskazanego pliku; ");
+					System.out.println("CF nazwa_pliku: tworzenie pustego pliku o wskazanej nazwie; ");
+					System.out.println("WF nazwa_pliku: dopisanie danych do danego pliku; ");
+					System.out.println("RF nazwa_pliku: czytanie wskazanego pliku; ");
+					System.out.println("LS: wyswietlenie plikow; ");
+					System.out.println("PD: sprawdzanie zawartosci dysku; ");
+					System.out.println("PS nr_sektora: sprawdzanie pojedynczego sektora dysku; ");
+					System.out.println("MEMORY: sprawdzanie stanu pamieci; ");
+					System.out.println("TASKLIST: sprawdzanie listy procesow; ");
+					System.out.println("TASKKILL: nazwa_procesu: zabijanie procesu; ");
+					System.out.println("GO: kolejny krok wykonywanego procesu; ");
+					System.out.println("START nazwa_procesu grupa_procesu nazwa_pliku: stworzenie procesu; ");
+					System.out.println("exit: wiadomka; ");
+
+					
+				}else
+					System.out.println("nieprawidlowe wywolanie komendy");
+			}
 			
-			if(tab[0].equals("DEL"))   ///////////////////////////////////////////////////////////////////usuwanie pliku
+			else if(tab[0].equals("DF"))
 			{
 				if(tab.length==2)
 					F.deleteFile(tab[1]);
@@ -33,16 +57,16 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			if(tab[0].equals("COPY")&&tab[1].equals("NULL"))  ////////////////////////////////////////////tworzenie pustego pliku
+			else if(tab[0].equals("CF"))
 			{
-				if(tab.length==3)
-					F.createFile(tab[2]);
+				if(tab.length==2)
+					F.createFile(tab[1]);
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
 			
-			if(tab[0].equals("OVR"))  ///////////////////////////////////////////////////////////////////dopisywanie danych do pliku
+			else if(tab[0].equals("WF"))
 			{
 				if(tab.length>2)
 				{
@@ -52,13 +76,13 @@ public class Main {
 						temp += " ";
 					}
 					F.writeFile(tab[1], temp);
-					//System.out.println("dopisywanie danych do pliku");
+					System.out.println("dopisywanie danych do pliku");
 				}
 				else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			if(tab[0].equals("OPF"))   ///////////////////////////////////////////////////////////////////usuwanie pliku
+			else if(tab[0].equals("RF"))
 			{
 				if(tab.length==2)
 					F.readFile(tab[1]);
@@ -67,44 +91,9 @@ public class Main {
 			
 			}
 			
-			if(tab[0].equals("HELP"))   ////////////////////////////////////////////////////////////////////pomoc
+			else if(tab[0].equals("PD"))
 			{
 				if(tab.length==1) {
-					System.out.println("DEL nazwa_pliku: usuwanie wskazanego pliku; ");
-					System.out.println("COPY NULL nazwa_pliku: tworzenie pustego pliku o wskazanej nazwie; ");
-					System.out.println("OVR nazwa_pliku: dopisanie danych do danego pliku; ");
-					System.out.println("OPF nazwa_pliku: czytanie wskazanego pliku; ");
-					System.out.println("MEMORY: sprawdzanie stanu pamieci; ");
-					System.out.println("CHKDSK: sprawdzanie zawarto�ci dysku; ");
-					System.out.println("LS: wyswietlenie plikow; ");
-					System.out.println("TASKLIST: sprawdzanie listy procesow; ");
-					System.out.println("TASKKILL: nazwa_procesu: zabijanie procesu; ");
-					System.out.println("GO: kolejny krok wykonywanego procesu; ");
-					System.out.println("START nazwa_procesu grupa_procesu nazwa_pliku: stworzenie procesu; ");
-					
-				}else
-					System.out.println("nieprawidlowe wywolanie komendy");
-			}
-			
-			
-			if(tab[0].equals("MEMORY"))   //////////////////////////////////////////////////////////////////pami�� 
-			{
-				if(tab.length==1) {
-					
-					//funkcja pokazuj�ca stan pami�ci 
-					System.out.println("stan pamieci");
-					M.printMemory();
-					
-				}else
-					System.out.println("nieprawidlowe wywolanie komendy");
-			}
-			
-			
-			if(tab[0].equals("CHKDSK"))   //////////////////////////////////////////////////////////////////dysk
-			{
-				if(tab.length==1) {
-					
-					//funkcja pokazuj�ca zawarto�� dysku 
 					System.out.println("zawartosc dysku");
 					F.printDisc();
 					
@@ -112,19 +101,42 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			if(tab[0].equals("LS"))   //////////////////////////////////////////////////////////////////dysk
+			else if(tab[0].equals("PS"))
+			{
+				if(tab.length==2) {
+					System.out.println("zawartosc sektora");
+					try {
+						int blockI = Integer.parseInt(tab[1]);
+						F.printSector(blockI);
+					} catch (NumberFormatException e) {
+						System.out.println("nieprawidlowe wywolanie komendy");
+					}
+
+					
+				}else
+					System.out.println("nieprawidlowe wywolanie komendy");
+			}
+			
+			else if(tab[0].equals("LS"))
 			{
 				if(tab.length==1) {
-					
-					//funkcja pokazuj�ca zawarto�� dysku 
 					System.out.println("Pliki");
 					F.listAllFiles();					
 				}else
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
+			else if(tab[0].equals("MEMORY"))
+			{
+				if(tab.length==1) {
+					System.out.println("stan pamieci");
+					M.printMemory();
+					
+				}else
+					System.out.println("nieprawidlowe wywolanie komendy");
+			}
 			
-			if(tab[0].equals("TASKLIST"))   ///////////////////////////////////////////////////////////////lista proces�w
+			else if(tab[0].equals("TASKLIST"))
 			{
 				if(tab.length==1) {
 					T.INIT.show_list();
@@ -133,8 +145,7 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			
-			if(tab[0].equals("TASKKILL"))   /////////////////////////////////////////////////////////////////zabijanie procesu
+			else if(tab[0].equals("TASKKILL"))
 			{
 				if(tab.length==2)
 					//tab[1] to nazwa procesu
@@ -144,8 +155,7 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			
-			if(tab[0].equals("GO"))   /////////////////////////////////////////////////////////////////////kolejny krok w procesie
+			else if(tab[0].equals("GO"))
 			{
 				if(tab.length==1) {
 					
@@ -160,9 +170,7 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-			
-			
-			if(tab[0].equals("START"))   //////////////////////////////////////////////////////////////////tworzenie procesu
+			else if(tab[0].equals("START"))
 			{
 				if(tab.length==4) {
 					/*
@@ -185,9 +193,12 @@ public class Main {
 					System.out.println("nieprawidlowe wywolanie komendy");
 			}
 			
-		}while(!string.equals("exit"));	
+			else if(!string.equals("exit")){
+				System.out.println("nie ma takiej komendy");
+			}
 			
-		
+		}while(!string.equals("exit"));	
+			in.close();	
 	}
 
 }
