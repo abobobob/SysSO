@@ -185,8 +185,9 @@ public class Main {
 						e.printStackTrace();
 					}
 					//tworzenie procesu 
-					process p = T.new process(tab[1]);
-					p.exec(fis.toString(), "", Integer.valueOf(tab[2]));
+					T.INIT.fork(tab[1]);
+					int p = T.find_name(tab[1]);
+					T.find(p).exec(fis.toString(), "", Integer.valueOf(tab[2]));
 					System.out.println("tworzenie procesu");
 				
 				}else
